@@ -35,6 +35,7 @@
 #include "tracks/track.hpp"
 #include "utils/profiler.hpp"
 #include "utils/stk_process.hpp"
+#include "replay/replay_control.hpp"
 
 #include <IrrlichtDevice.h>
 
@@ -467,9 +468,18 @@ void WorldStatus::updateTime(int ticks)
         case CLOCK_CHRONO:
             if (m_process_type == PT_CHILD || !device->getTimer()->isStopped())
             {
-                m_time_ticks++;
-                m_time  = stk_config->ticks2Time(m_time_ticks);
-                m_count_up_ticks++;
+                if (ReplayControl::get() != NULL && ReplayControl::get()->isControlEnabled()
+                    && RaceManager::get()->isWatchingReplay())
+                {
+                    setTime(ReplayControl::get()->advance(stk_config->ticks2Time(1)));
+                    m_count_up_ticks++;
+                }
+                else
+                {
+                    m_time_ticks++;
+                    m_time  = stk_config->ticks2Time(m_time_ticks);
+                    m_count_up_ticks++;
+                }
             }
             break;
         case CLOCK_COUNTDOWN:

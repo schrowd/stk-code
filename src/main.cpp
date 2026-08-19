@@ -271,6 +271,7 @@ extern "C" {
 #include "race/race_manager.hpp"
 #include "replay/replay_play.hpp"
 #include "replay/replay_recorder.hpp"
+#include "replay/replay_control.hpp"
 #include "states_screens/main_menu_screen.hpp"
 #include "states_screens/online/networking_lobby.hpp"
 #include "states_screens/online/register_screen.hpp"
@@ -638,6 +639,7 @@ void cmdLineHelp()
     "       --demo-laps=n      Number of laps to use in a demo.\n"
     "       --demo-karts=n     Number of karts to use in a demo.\n"
     "       --history          Replay history file 'history.dat'.\n"
+    "       --replay-control   Enable replay control functionality.\n"
     "       --server-config=file Specify the server_config.xml for server hosting, it will create\n"
     "                            one if not found.\n"
     "       --network-console  Enable network console.\n"
@@ -1841,6 +1843,12 @@ int handleCmdLine(bool has_server_config, bool has_parent_process)
             UserConfigParams::m_no_start_screen = true;
     }   // --history
 
+    if(CommandLine::has("--replay-control"))
+    {
+        ReplayControl::create();
+        ReplayControl::get()->setControlEnabled(true);
+    }    // --replay-control
+
     // Demo mode
     if(CommandLine::has("--demo-mode", &s))
     {
@@ -2791,6 +2799,7 @@ static void cleanSuperTuxKart()
     if(history)                 delete history;
     ReplayPlay::destroy();
     ReplayRecorder::destroy();
+    ReplayControl::destroy();
     delete ParticleKindManager::get();
     PlayerManager::destroy();
     if(unlock_manager)          delete unlock_manager;

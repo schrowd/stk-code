@@ -47,6 +47,7 @@
 #include "karts/controller/test_ai.hpp"
 #include "karts/controller/network_ai_controller.hpp"
 #include "karts/controller/network_player_controller.hpp"
+#include "karts/controller/ghost_controller.hpp"
 #include "karts/kart.hpp"
 #include "karts/kart_model.hpp"
 #include "karts/kart_properties_manager.hpp"
@@ -67,6 +68,7 @@
 #include "race/race_manager.hpp"
 #include "replay/replay_play.hpp"
 #include "replay/replay_recorder.hpp"
+#include "replay/replay_control.hpp"
 #include "scriptengine/script_engine.hpp"
 #include "states_screens/dialogs/race_paused_dialog.hpp"
 #include "states_screens/race_gui_base.hpp"
@@ -371,6 +373,27 @@ void World::reset(bool restart)
     m_eliminated_karts    = 0;
     m_eliminated_players  = 0;
     m_is_network_world = false;
+
+    // Resets ReplayControl's data and calculates the longest duration from the
+    // ghosts' replay data
+    if(ReplayControl::get() != NULL && RaceManager::get()->isWatchingReplay())
+    {
+        ReplayControl::get()->reset();
+        float longest_duration = -1.0f;
+        for ( KartList::iterator i = m_karts.begin(); i != m_karts.end() ; ++i)
+        {
+            GhostController* is_ghost = dynamic_cast<GhostController*>((*i)->getController());
+            if (is_ghost != NULL)
+            {
+                float ghost_time = is_ghost->getLastTime();
+                if (ghost_time >= longest_duration)
+                {
+                    longest_duration = ghost_time;
+                }
+            }
+        }
+            ReplayControl::get()->setDuration(longest_duration);
+    }
 
     for ( KartList::iterator i = m_karts.begin(); i != m_karts.end() ; ++i )
     {
