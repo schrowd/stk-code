@@ -639,7 +639,6 @@ void cmdLineHelp()
     "       --demo-laps=n      Number of laps to use in a demo.\n"
     "       --demo-karts=n     Number of karts to use in a demo.\n"
     "       --history          Replay history file 'history.dat'.\n"
-    "       --replay-control   Enable replay control functionality.\n"
     "       --server-config=file Specify the server_config.xml for server hosting, it will create\n"
     "                            one if not found.\n"
     "       --network-console  Enable network console.\n"
@@ -1843,12 +1842,6 @@ int handleCmdLine(bool has_server_config, bool has_parent_process)
             UserConfigParams::m_no_start_screen = true;
     }   // --history
 
-    if(CommandLine::has("--replay-control"))
-    {
-        ReplayControl::create();
-        ReplayControl::get()->setControlEnabled(true);
-    }    // --replay-control
-
     // Demo mode
     if(CommandLine::has("--demo-mode", &s))
     {
@@ -2050,6 +2043,7 @@ void initRest()
     history                 = new History              ();
     ReplayPlay::create();
     ReplayRecorder::create();
+    ReplayControl::create();
     material_manager        = new MaterialManager      ();
     track_manager           = new TrackManager         ();
     kart_properties_manager = new KartPropertiesManager();

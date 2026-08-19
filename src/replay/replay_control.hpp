@@ -21,7 +21,9 @@
 
 #include <cstddef>
 
-/** Owns the replay playback clock */
+/** Owns the replay playback clock. This is mode-agnostic, so if you
+ *  let its values reach the world state, they must be guarded by a
+ *  check to see if watch replay mode is active. */
 class ReplayControl
 {
 private:
