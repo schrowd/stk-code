@@ -26,17 +26,11 @@ void ReplayControl::setRate(double rate)
 {
     // Checks the rate and clamps it if it's not between 0.1 and 4
     if (rate < 0.1)
-    {
         m_rate = 0.1;
-    }
     else if (rate > 4.0)
-    {
         m_rate = 4.0;
-    }
     else
-    {
         m_rate = rate;
-    }
 }
 
 void ReplayControl::reset()
@@ -53,20 +47,14 @@ void ReplayControl::reset()
 // remains deliberately unimplemented.
 void ReplayControl::seek(double target)
 {
-    if (m_duration == -1) return;
-
+    if (m_duration == -1)
+        return;
     if (target < 0.0)
-    {
         m_head = 0.0;
-    }
     else if (target > m_duration)
-    {
         m_head = m_duration;
-    }
     else
-    {
         m_head = target;
-    }
 }
 
 // Checks if the replay is paused: if not, it adds the product of
@@ -79,9 +67,7 @@ void ReplayControl::seek(double target)
 double ReplayControl::advance(double dt)
 {
     if (m_is_playing == false)
-    {
         return m_head;
-    }
     m_head += dt * m_rate;
     if (m_head >= m_duration && m_duration != -1.0)
     {

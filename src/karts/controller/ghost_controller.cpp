@@ -20,6 +20,7 @@
 #include "karts/controller/ghost_controller.hpp"
 #include "karts/controller/kart_control.hpp"
 #include "modes/world.hpp"
+#include "replay/replay_control.hpp"
 
 GhostController::GhostController(AbstractKart *kart, core::stringw display_name)
                 : Controller(kart)
@@ -102,5 +103,48 @@ bool GhostController::action(PlayerAction action, int value, bool dry_run)
         m_controls->setLookBack(value!=0);
     else if (action == PA_PAUSE_RACE)
         if (value != 0) StateManager::get()->escapePressed();
+
+    // Replay control input system
+    if (ReplayControl::get()->isControlEnabled() && value != 0)
+    {
+        // Variable declarations
+        ReplayControl* rc          =  ReplayControl::get();
+        double current_rate        =  rc->getRate();
+        const double SEEK_DELTA    =  3.0;
+        const double RATE_VALUES[] =  { 0.1, 0.25,  0.5, 1.0, 2.0, 4.0 };
+        const int RATE_COUNT       =  sizeof(RATE_VALUES) / sizeof(RATE_VALUES[0]);
+
+        // Pause
+        if (action == PA_FIRE)
+            rc->setPlaying(!rc->isPlaying());
+
+        // Seek
+        else if (action == PA_STEER_LEFT)
+            rc->seek(rc->getHead() - SEEK_DELTA);
+        else if (action == PA_STEER_RIGHT)
+            rc->seek(rc->getHead() + SEEK_DELTA);
+
+        // Change rate
+        else if (action == PA_BRAKE)
+        {
+            int rate_index  = RATE_COUNT - 1;
+            while (rate_index > 0 &&
+                   RATE_VALUES[rate_index] >= current_rate)
+            {
+                rate_index--;
+            }
+            rc->setRate(RATE_VALUES[rate_index]);
+        }
+        else if (action == PA_ACCEL)
+        {
+            int rate_index  = 0;
+            while (rate_index < RATE_COUNT - 1 &&
+                   RATE_VALUES[rate_index] <= current_rate)
+            {
+                rate_index++;
+            }
+            rc->setRate(RATE_VALUES[rate_index]);
+        }
+    }
     return true;
 }   // action
