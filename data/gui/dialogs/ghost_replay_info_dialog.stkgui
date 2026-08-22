@@ -31,6 +31,11 @@
                         <label proportion="1" id="watch-only-text" height="100%" text_align="left" I18N="Ghost replay info action" text="Watch replay only"/>
                     </div>
                     <div width="100%" height="fit" layout="horizontal-row" >
+                        <checkbox width="fit" id="replay-control" I18N="Ghost replay info action" text_align="left"/>
+                        <spacer width="1%"/>
+                        <label proportion="1" id="replay-control-text" height="100%" text_align="left" I18N="Ghost replay info action" text="Enable replay control"/>
+                    </div>
+                    <div width="100%" height="fit" layout="horizontal-row" >
                         <checkbox width="fit" id="compare-ghost" I18N="Ghost replay info action" text_align="left"/>
                         <spacer width="1%"/>
                         <label proportion="1" id="compare-ghost-text" height="100%" text_align="left" I18N="Ghost replay info action" text="Compare to another ghost"/>

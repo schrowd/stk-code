@@ -49,6 +49,7 @@
 #include "online/request_manager.hpp"
 #include "race/history.hpp"
 #include "race/race_manager.hpp"
+#include "replay/replay_control.hpp"
 #include "states_screens/dialogs/server_info_dialog.hpp"
 #include "states_screens/online/server_selection.hpp"
 #include "states_screens/main_menu_screen.hpp"
@@ -456,8 +457,24 @@ void MainLoop::run()
 
         PROFILER_PUSH_CPU_MARKER("Main loop", 0xFF, 0x00, 0xF7);
         TimePoint frame_start = std::chrono::steady_clock::now();
+        ReplayControl* rc = ReplayControl::get();
 
-        left_over_time += getLimitedDt();
+        if (RaceManager::get()->isWatchingReplay() &&
+            rc->isControlEnabled())
+        {
+            if (!rc->isPlaying())
+            {
+                left_over_time += getLimitedDt()*0;
+            }
+            else
+            {
+                left_over_time += getLimitedDt()*rc->getRate();
+            }
+        }
+        else
+        {
+            left_over_time += getLimitedDt();
+        }
         int num_steps   = stk_config->time2Ticks(left_over_time);
         float dt = stk_config->ticks2Time(1);
         left_over_time -= num_steps * dt;
