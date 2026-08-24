@@ -35,6 +35,7 @@
 #include "guiengine/modaldialog.hpp"
 #include "guiengine/screen_keyboard.hpp"
 #include "input/input_manager.hpp"
+#include "karts/kart.hpp"
 #include "modes/world.hpp"
 #include "modes/profile_world.hpp"
 #include "network/network_config.hpp"
@@ -54,6 +55,9 @@
 #include "states_screens/online/server_selection.hpp"
 #include "states_screens/main_menu_screen.hpp"
 #include "states_screens/state_manager.hpp"
+#include "tracks/check_manager.hpp"
+#include "tracks/track.hpp"
+#include "tracks/track_object_manager.hpp"
 #include "utils/profiler.hpp"
 #include "utils/string_utils.hpp"
 #include "utils/time.hpp"
@@ -63,6 +67,8 @@
 #include <thread>
 
 #include <IrrlichtDevice.h>
+
+#include <cmath>
 
 #ifndef WIN32
 #include <unistd.h>
@@ -462,13 +468,21 @@ void MainLoop::run()
         if (RaceManager::get()->isWatchingReplay() &&
             rc->isControlEnabled())
         {
+            // Stops time using The World
             if (!rc->isPlaying())
             {
                 left_over_time += getLimitedDt()*0;
             }
             else
             {
-                left_over_time += getLimitedDt()*rc->getRate();
+                if (!rc->isRewinding())
+                {
+                    left_over_time += getLimitedDt()*rc->getRate();
+                }
+                else
+                {
+                    left_over_time -= getLimitedDt()*rc->getRate();
+                }
             }
         }
         else
@@ -578,7 +592,9 @@ void MainLoop::run()
 
         if (!m_abort)
         {
-            float frame_duration = num_steps * dt;
+            // We take the absolute value of num_steps to avoid a frozen screen
+            // during a rewind
+            float frame_duration = std::abs(num_steps) * dt;
             if (!GUIEngine::isNoGraphics())
             {
                 PROFILER_PUSH_CPU_MARKER("Update race", 0, 255, 255);
@@ -640,6 +656,10 @@ void MainLoop::run()
             bool fast_forward = NetworkConfig::get()->isNetworking() &&
                 NetworkConfig::get()->isClient() &&
                 num_steps > stk_config->time2Ticks(1.0f);
+
+            if (num_steps < 0)
+                updateRace(num_steps, false);
+
             for (int i = 0; i < num_steps; i++)
             {
                 if (World::getWorld() && history->replayHistory())

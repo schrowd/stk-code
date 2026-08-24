@@ -33,6 +33,9 @@ private:
     /** True if replay playback is playing, false if paused. */
     bool   m_is_playing;
 
+    /** True if the direction of time is backwards */
+    bool   m_is_rewinding;
+
     /** The rate of playback as a multiplier. */
     double m_rate;
 
@@ -46,6 +49,7 @@ public:
     {
         m_control_enabled =  false;
         m_is_playing      =  false;
+        m_is_rewinding    =  false;
         m_rate            =  1.0;
         m_duration        = -1.0;
     }
@@ -56,6 +60,8 @@ public:
     // ------------------------------------------------------------------------
     bool    isPlaying()        const { return m_is_playing; }
     // ------------------------------------------------------------------------
+    bool    isRewinding()      const { return m_is_rewinding; }
+    // ------------------------------------------------------------------------
     double  getRate()          const { return m_rate; }
     // ------------------------------------------------------------------------
     double  getDuration()      const { return m_duration; }
@@ -64,6 +70,8 @@ public:
                                        { m_control_enabled = control_enabled; }
     // ------------------------------------------------------------------------
     void    setPlaying(bool playing)                { m_is_playing = playing; }
+    // ------------------------------------------------------------------------
+    void    setRewinding(bool rewinding)        { m_is_rewinding = rewinding; }
     // ------------------------------------------------------------------------
     void    setDuration(double duration)             { m_duration = duration; }
     // ------------------------------------------------------------------------

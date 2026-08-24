@@ -34,7 +34,8 @@ void ReplayControl::setRate(double rate)
 
 void ReplayControl::reset()
 {
-    m_is_playing =  true;
-    m_rate       =  1.0;
-    m_duration   = -1.0;
+    m_is_playing   =  true;
+    m_is_rewinding =  false;
+    m_rate         =  1.0;
+    m_duration     = -1.0;
 }

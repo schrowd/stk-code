@@ -629,6 +629,10 @@ void RaceGUI::drawReplayMenu()
                                 StringUtils::toWString(rc->getRate())), y, x, false);
     y = height*44/100;
 
+    RaceGUI::drawReplayMenuLine(_("[%s] to rewind", getKeyBinding(PA_NITRO)), y, x, false);
+
+    y = height*48/100;
+
     RaceGUI::drawReplayMenuLine(_("Time: %s / %s",
                                 core::stringw (StringUtils::timeToString(World::getWorld()->getTime()).c_str()),
                                 core::stringw (StringUtils::timeToString(rc->getDuration()).c_str())),
