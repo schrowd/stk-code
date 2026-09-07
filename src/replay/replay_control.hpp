@@ -27,9 +27,6 @@
 class ReplayControl
 {
 private:
-    /** True if replay control is enabled. */
-    bool   m_control_enabled;
-
     /** True if replay playback is playing, false if paused. */
     bool   m_is_playing;
 
@@ -44,7 +41,6 @@ private:
 public:
     ReplayControl()
     {
-        m_control_enabled =  false;
         m_is_playing      =  false;
         m_rate            =  1.0;
         m_duration        = -1.0;
@@ -52,16 +48,11 @@ public:
     // ------------------------------------------------------------------------
     void    reset();
     // ------------------------------------------------------------------------
-    bool    isControlEnabled() const { return m_control_enabled; }
-    // ------------------------------------------------------------------------
     bool    isPlaying()        const { return m_is_playing; }
     // ------------------------------------------------------------------------
     double  getRate()          const { return m_rate; }
     // ------------------------------------------------------------------------
     double  getDuration()      const { return m_duration; }
-    // ------------------------------------------------------------------------
-    void    setControlEnabled(bool control_enabled)
-                                       { m_control_enabled = control_enabled; }
     // ------------------------------------------------------------------------
     void    setPlaying(bool playing)                { m_is_playing = playing; }
     // ------------------------------------------------------------------------

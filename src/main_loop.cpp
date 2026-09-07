@@ -459,8 +459,7 @@ void MainLoop::run()
         TimePoint frame_start = std::chrono::steady_clock::now();
         ReplayControl* rc = ReplayControl::get();
 
-        if (RaceManager::get()->isWatchingReplay() &&
-            rc->isControlEnabled())
+        if (RaceManager::get()->isWatchingReplay())
         {
             if (!rc->isPlaying())
             {

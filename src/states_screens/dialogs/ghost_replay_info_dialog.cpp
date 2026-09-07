@@ -30,7 +30,6 @@
 #include "karts/kart_properties.hpp"
 #include "karts/kart_properties_manager.hpp"
 #include "race/race_manager.hpp"
-#include "replay/replay_control.hpp"
 #include "replay/replay_play.hpp"
 #include "states_screens/ghost_replay_selection.hpp"
 #include "states_screens/state_manager.hpp"
@@ -50,7 +49,6 @@ GhostReplayInfoDialog::GhostReplayInfoDialog(unsigned int replay_id,
     m_self_destroy         = false;
     m_record_race          = false;
     m_watch_only           = false;
-    m_control_replay       = false;
 
     m_compare_ghost        = compare_ghost;
     m_compare_replay_uid   = compare_replay_uid;
@@ -109,7 +107,6 @@ GhostReplayInfoDialog::GhostReplayInfoDialog(unsigned int replay_id,
     m_action_widget = getWidget<RibbonWidget>("actions");
     m_record_widget = getWidget<CheckBoxWidget>("record-race");
     m_watch_widget = getWidget<CheckBoxWidget>("watch-only");
-    m_control_widget = getWidget<CheckBoxWidget>("replay-control");
     m_compare_widget = getWidget<CheckBoxWidget>("compare-ghost");
 
     if (RaceManager::get()->getNumLocalPlayers() > 1)
@@ -121,7 +118,6 @@ GhostReplayInfoDialog::GhostReplayInfoDialog(unsigned int replay_id,
 
     m_record_widget->setState(false);
     m_watch_widget->setState(m_compare_ghost);
-    m_control_widget->setState(false);
     m_compare_widget->setState(m_compare_ghost);
 
     if (m_compare_ghost)
@@ -133,10 +129,6 @@ GhostReplayInfoDialog::GhostReplayInfoDialog(unsigned int replay_id,
         m_record_widget->setVisible(false);
         getWidget<LabelWidget>("record-race-text")->setVisible(false);
     }
-
-    // Shows the checkbox in watch mode as replay control is contingent upon it
-    getWidget<LabelWidget>("replay-control-text")->setVisible(m_watch_only);
-    m_control_widget->setVisible(m_watch_only);
 
     // Display this checkbox only if there is another replay file to compare with
     getWidget<LabelWidget>("compare-ghost-text")->setVisible(m_compare_ghost);
@@ -260,7 +252,6 @@ GUIEngine::EventPropagation
 
             RaceManager::get()->setRecordRace(m_record_race);
             RaceManager::get()->setWatchingReplay(m_watch_only);
-            ReplayControl::get()->setControlEnabled(m_control_replay);
             if (m_watch_only)
                 RaceManager::get()->setDifficulty((RaceManager::Difficulty)m_rd.m_difficulty);
             ReplayPlay::get()->setReplayFile(replay_id);
@@ -288,7 +279,7 @@ GUIEngine::EventPropagation
             GhostReplaySelection::getInstance()->setCompare(false);
 
             ModalDialog::dismiss();
-
+          
             if (RaceManager::get()->isWatchingReplay())
                 RaceManager::get()->startWatchingReplay(track_name, laps);
             else
@@ -336,12 +327,6 @@ GUIEngine::EventPropagation
         m_record_widget->setState(false);
         m_record_widget->setVisible(!m_watch_only);
         getWidget<LabelWidget>("record-race-text")->setVisible(!m_watch_only);
-
-        m_control_replay = false;
-        m_control_widget->setState(false);
-        m_control_widget->setVisible(m_watch_only);
-        getWidget<LabelWidget>("replay-control-text")->setVisible(m_watch_only);
-
         if (!m_watch_only && m_compare_ghost)
         {
             m_compare_ghost = false;
@@ -350,11 +335,6 @@ GUIEngine::EventPropagation
 
             m_replay_id = ReplayPlay::get()->getReplayIdByUID(m_rd.m_replay_uid);
         }
-    }
-
-    else if (event_source == "replay-control")
-    {
-        m_control_replay = m_control_widget->getState();
     }
 
     else if (event_source == "compare-ghost")
@@ -374,9 +354,6 @@ GUIEngine::EventPropagation
         }
         m_record_widget->setVisible(!m_watch_only);
         getWidget<LabelWidget>("record-race-text")->setVisible(!m_watch_only);
-
-        m_control_widget->setVisible(m_watch_only);
-        getWidget<LabelWidget>("replay-control-text")->setVisible(m_watch_only);
 
         refreshMainScreen();
 

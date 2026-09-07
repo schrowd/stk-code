@@ -105,7 +105,7 @@ bool GhostController::action(PlayerAction action, int value, bool dry_run)
         if (value != 0) StateManager::get()->escapePressed();
 
     // Replay control input system
-    if (ReplayControl::get()->isControlEnabled() && value != 0)
+    if (RaceManager::get()->isWatchingReplay() && value != 0)
     {
         // Variable declarations
         ReplayControl* rc          =  ReplayControl::get();

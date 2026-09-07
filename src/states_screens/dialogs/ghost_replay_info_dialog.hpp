@@ -41,7 +41,6 @@ private:
 
     bool  m_record_race;
     bool  m_watch_only;
-    bool  m_control_replay;
     bool  m_compare_ghost;
 
     unsigned int m_replay_id; // May be updated on list refreshes
@@ -55,7 +54,6 @@ private:
     GUIEngine::IconButtonWidget*  m_back_widget;
     GUIEngine::CheckBoxWidget*    m_record_widget;
     GUIEngine::CheckBoxWidget*    m_watch_widget;
-    GUIEngine::CheckBoxWidget*    m_control_widget;
     GUIEngine::CheckBoxWidget*    m_compare_widget;
 
     GUIEngine::ListWidget*        m_replay_info_widget;

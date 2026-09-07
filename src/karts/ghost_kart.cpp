@@ -233,7 +233,6 @@ void GhostKart::update(int ticks)
 
     // Graphical effects for nitro, zipper and skidding
     if (RaceManager::get()->isWatchingReplay() &&
-        ReplayControl::get()->isControlEnabled() &&
         !ReplayControl::get()->isPlaying())
     {
         getKartGFX()->setGFXFromReplay(false, false, false, false, false);
@@ -305,7 +304,6 @@ void GhostKart::updateSound(float dt)
 bool GhostKart::isReplayPaused() const
 {
     return RaceManager::get()->isWatchingReplay() &&
-           ReplayControl::get()->isControlEnabled() &&
            !ReplayControl::get()->isPlaying();
 }   // isReplayPaused
 

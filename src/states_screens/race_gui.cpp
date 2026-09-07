@@ -606,8 +606,7 @@ void RaceGUI::drawReplayMenu()
     int y = height*20/100;
     int x = width*77/100;
 
-    if (!RaceManager::get()->isWatchingReplay() ||
-        !ReplayControl::get()->isControlEnabled()) { return; }
+    if (!RaceManager::get()->isWatchingReplay()) { return; }
 
     gui::ScalableFont* font = GUIEngine::getFont();
     font->setScale(1.0f);
