@@ -248,11 +248,11 @@ void GhostKart::update(int ticks)
     }
     else
     {
-    getKartGFX()->setGFXFromReplay(m_all_replay_events[idx].m_nitro_usage,
-                                   m_all_replay_events[idx].m_zipper_usage,
-                                   m_all_replay_events[idx].m_skidding_effect,
-                                   m_all_replay_events[idx].m_red_skidding,
-                                   m_all_replay_events[idx].m_purple_skidding);
+        getKartGFX()->setGFXFromReplay(m_all_replay_events[idx].m_nitro_usage,
+                                       m_all_replay_events[idx].m_zipper_usage,
+                                       m_all_replay_events[idx].m_skidding_effect,
+                                       m_all_replay_events[idx].m_red_skidding,
+                                       m_all_replay_events[idx].m_purple_skidding);
     }
     getKartGFX()->update(dt);
 
