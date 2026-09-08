@@ -384,13 +384,10 @@ void World::reset(bool restart)
         for ( KartList::iterator i = m_karts.begin(); i != m_karts.end() ; ++i)
         {
             GhostController* is_ghost = dynamic_cast<GhostController*>((*i)->getController());
-            if (is_ghost != NULL)
+            if (is_ghost != nullptr &&
+                is_ghost->getLastTime() >= longest_duration)
             {
-                float ghost_time = is_ghost->getLastTime();
-                if (ghost_time >= longest_duration)
-                {
-                    longest_duration = ghost_time;
-                }
+                longest_duration = is_ghost->getLastTime();
             }
         }
         ReplayControl::get()->setDuration(longest_duration);
