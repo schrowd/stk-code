@@ -460,21 +460,12 @@ void MainLoop::run()
         ReplayControl* rc = ReplayControl::get();
         double elapsed_time = getLimitedDt();
 
-        if (RaceManager::get()->isWatchingReplay())
-        {
-            if (!rc->isPlaying())
-            {
-                left_over_time += elapsed_time*0;
-            }
-            else
-            {
-                left_over_time += elapsed_time*rc->getRate();
-            }
-        }
-        else
-        {
+        if (!RaceManager::get()->isWatchingReplay())
             left_over_time += elapsed_time;
-        }
+        else if (rc->isPlaying())
+            left_over_time += elapsed_time*rc->getRate();
+        // In the paused watched replay case, there is nothing to do
+
         int num_steps   = stk_config->time2Ticks(left_over_time);
         float dt = stk_config->ticks2Time(1);
         left_over_time -= num_steps * dt;
