@@ -104,7 +104,16 @@ void GhostKart::updateGraphics(float dt)
     Moveable::updateGraphics(center_shift, btQuaternion(0, 0, 0, 1));
     // Also update attachment's graphics
     m_attachment->updateGraphics(dt);
+    // Sets the kart's animation speed based on ReplayControl's rate
+    if (getKartModel()->getAnimatedNode() && RaceManager::get()->isWatchingReplay())
+    {
+        double multiplier = 0;
+        if (ReplayControl::get()->isPlaying())
+            multiplier = ReplayControl::get()->getRate();
 
+        getKartModel()->getAnimatedNode()->setAnimationSpeed(getKartModel()
+            ->getAnimationSpeed() * multiplier);
+    }
     updateSound(dt);
 }   // updateGraphics
 
