@@ -58,7 +58,7 @@ public:
     // ------------------------------------------------------------------------
     void    setDuration(double duration)             { m_duration = duration; }
     // ------------------------------------------------------------------------
-    void    setRate(double rate);
+    void    setRate(double rate)                             { m_rate = rate; }
     // ------------------------------------------------------------------------
     /** Creates a new instance of the replay controller. */
     static void           create()  { m_replay_control = new ReplayControl(); }

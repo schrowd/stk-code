@@ -21,17 +21,6 @@
 
 ReplayControl *ReplayControl::m_replay_control = NULL;
 
-void ReplayControl::setRate(double rate)
-{
-    // Checks the rate and clamps it if it's not between 0.1 and 4
-    if (rate < 0.1)
-        m_rate = 0.1;
-    else if (rate > 4.0)
-        m_rate = 4.0;
-    else
-        m_rate = rate;
-}
-
 void ReplayControl::reset()
 {
     m_is_playing =  true;
