@@ -182,9 +182,7 @@ void TrackObjectPresentationSceneNode::updateGraphics(float dt)
             scene::IAnimatedMeshSceneNode* a_node =
                 dynamic_cast<scene::IAnimatedMeshSceneNode*>(node);
             if (a_node)
-            {
                 a_node->setAnimationSpeed(25.0f * multiplier);
-            }
         }
     }
     else
