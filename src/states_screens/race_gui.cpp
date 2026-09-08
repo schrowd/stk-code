@@ -570,15 +570,13 @@ void RaceGUI::drawLiveDifference()
  */
 void RaceGUI::drawReplayMenuLine(const core::stringw& text, int y, int x, bool hcenter)
 {
-    core::stringw rc_text = text;
-
     core::rect<s32> pos(x,
                         y,
                         irr_driver->getActualScreenSize().Width,
                         y + irr_driver->getActualScreenSize().Height*3/100);
 
     gui::ScalableFont* font = GUIEngine::getFont();
-    font->draw(rc_text.c_str(), pos, video::SColor(255, 255, 255, 255),
+    font->draw(text.c_str(), pos, video::SColor(255, 255, 255, 255),
                hcenter, false, NULL, true);
 }   // drawReplayMenuLine
 
@@ -594,41 +592,42 @@ static core::stringw getKeyBinding(PlayerAction action)
         return config->getBindingAsString(action);
     }
     else { return ""; }
-}
+}   // getKeyBinding
+
 //-----------------------------------------------------------------------------
 /** Draws the replay control menu.
  */
 void RaceGUI::drawReplayMenu()
 {
+    if (!RaceManager::get()->isWatchingReplay()) { return; }
+
     ReplayControl* rc = ReplayControl::get();
     int height = irr_driver->getActualScreenSize().Height;
     int width = irr_driver->getActualScreenSize().Width;
     int y = height*20/100;
     int x = width*77/100;
 
-    if (!RaceManager::get()->isWatchingReplay()) { return; }
-
     gui::ScalableFont* font = GUIEngine::getFont();
     font->setScale(1.0f);
     font->setBlackBorder(true);
 
-    RaceGUI::drawReplayMenuLine(_("--Replay Controls--"), y, x, true);
+    drawReplayMenuLine(_("--Replay Controls--"), y, x, true);
 
     y = height*24/100;
 
-    RaceGUI::drawReplayMenuLine(_("[%s] to pause", getKeyBinding(PA_FIRE)), y, x,
+    drawReplayMenuLine(_("[%s] to pause", getKeyBinding(PA_FIRE)), y, x,
                                 false);
     y = height*32/100;
 
-    RaceGUI::drawReplayMenuLine(_("[%s/%s] to change rate", getKeyBinding(PA_BRAKE),
+    drawReplayMenuLine(_("[%s/%s] to change rate", getKeyBinding(PA_BRAKE),
                                 getKeyBinding(PA_ACCEL)), y, x, false);
     y = height*36/100;
 
-    RaceGUI::drawReplayMenuLine(_("Rate is currently x%s",
+    drawReplayMenuLine(_("Rate is currently x%s",
                                 StringUtils::toWString(rc->getRate())), y, x, false);
     y = height*44/100;
 
-    RaceGUI::drawReplayMenuLine(_("Time: %s / %s",
+    drawReplayMenuLine(_("Time: %s / %s",
                                 core::stringw (StringUtils::timeToString(World::getWorld()->getTime()).c_str()),
                                 core::stringw (StringUtils::timeToString(rc->getDuration()).c_str())),
                                 y, x, false);

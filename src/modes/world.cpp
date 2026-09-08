@@ -67,9 +67,9 @@
 #include "race/highscore_manager.hpp"
 #include "race/history.hpp"
 #include "race/race_manager.hpp"
+#include "replay/replay_control.hpp"
 #include "replay/replay_play.hpp"
 #include "replay/replay_recorder.hpp"
-#include "replay/replay_control.hpp"
 #include "scriptengine/script_engine.hpp"
 #include "states_screens/dialogs/race_paused_dialog.hpp"
 #include "states_screens/race_gui_base.hpp"
@@ -393,7 +393,7 @@ void World::reset(bool restart)
                 }
             }
         }
-            ReplayControl::get()->setDuration(longest_duration);
+        ReplayControl::get()->setDuration(longest_duration);
     }
 
     for ( KartList::iterator i = m_karts.begin(); i != m_karts.end() ; ++i )
